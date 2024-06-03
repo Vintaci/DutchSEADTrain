@@ -80,18 +80,18 @@ do
             local groupName = group:getName()
             if not groupName then return end
 
-            local pattern = "^Hawk(%d+)"
-            local prefix, number = groupName:match(pattern)
+            local pattern = "^Hawk(%d)"
 
             local groupPrefix = '1'
             local targetZone = 'Hawk1_TGT_SpawnZone'
 
-            if prefix then
+            local number = string.match(groupName,pattern)
+            if number then
                 if number == '2' then
                     groupPrefix = '2'
                     targetZone = 'Hawk2_TGT_SpawnZone'
                 end
-
+                
                 if number == '3' then
                     groupPrefix = '3'
                     targetZone = 'Hawk3_TGT_SpawnZone'
@@ -102,6 +102,7 @@ do
                     targetZone = 'Hawk4_TGT_SpawnZone'
                 end
 
+                Utils.messageToAll('groupName: '..groupName..'groupPrefix: '..groupPrefix) --Debug
                 DutchSEADTrain:new(group,groupPrefix,groupName,targetZone)
             end
         end
@@ -255,11 +256,11 @@ do
         local category = vars.category
         if not category then return end
 
+        self.TGTGroup[category] = self.TGTGroup[category] or nil
         if self.TGTGroup[category] then
             self.deactiveSAM({context = self,category = category})
         end
         
-
         local point = nil
 
         for i=1,500,1 do
